@@ -1,6 +1,8 @@
 ﻿namespace PokemonApp.Repository
 {
-    public class Categoryrepository
+    public class CategoryRepository
     {
+
+
     }
 }
