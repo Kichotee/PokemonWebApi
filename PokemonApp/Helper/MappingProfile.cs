@@ -9,6 +9,8 @@ namespace PokemonApp.Helper
         public MappingProfile()
         {
             CreateMap<Pokemon, PokemonDto>();
+            CreateMap<Category, CategoryDto>();
+
         }
     }
 }
