@@ -16,14 +16,11 @@ namespace PokemonApp.Repository
 
         }
 
-        public bool CountryExists(int id)
-        {
-            return _context.Countries.Any(p => p.Id == id);
-        }
+       
 
         public ICollection<Country> GetCountries()
         {
-            return _context.Countries.OrderBy(p => p.Id).ToList();
+            return _context.Countries.ToList();
         }
 
         public Country GetCountry(int id)
@@ -45,6 +42,10 @@ namespace PokemonApp.Repository
                 .Where(po => po.OwnerId == countryId)
                 .Select(p => p.Owner)
                 .ToList();
+        }
+        public bool CountryExists(int id)
+        {
+            return _context.Countries.Any(p => p.Id == id);
         }
     }
 }

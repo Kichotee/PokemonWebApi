@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PokemonApp.Dto;
 using PokemonApp.Interfaces;
@@ -26,24 +25,25 @@ namespace PokemonApp.Controllers
 
         public IActionResult GetCountries()
         {
-            List<CountryDto> countries = _mapper.Map<List<CountryDto>>(_countryRepository.GetCountries());
+           var countries = _mapper.Map<List<CountryDto>>(_countryRepository.GetCountries());
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             return Ok(countries);
         }
+
         [HttpGet("{Id}")]
         [ProducesResponseType(200, Type = typeof(Country))]
         [ProducesResponseType(400)]
 
-        public IActionResult GetCountries(int id)
+        public IActionResult GetCountry(int Id)
         {
-            if (!_countryRepository.CountryExists(id))
+            if (!_countryRepository.CountryExists(Id))
             {
                 return NotFound();
             }
-            var country = _mapper.Map<CountryDto>(_countryRepository.GetCountry(id));
+            var country = _mapper.Map<CountryDto>(_countryRepository.GetCountry(Id));
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -51,7 +51,7 @@ namespace PokemonApp.Controllers
             }
             return Ok(country);
         }
-        [HttpGet("{Id}")]
+        [HttpGet("country/{ownerId}")]
         [ProducesResponseType(200, Type = typeof(Country))]
         [ProducesResponseType(400)]
 
@@ -69,17 +69,19 @@ namespace PokemonApp.Controllers
             }
             return Ok(country);
         }
-        [HttpGet("{Id}")]
+
+
+        [HttpGet("owners/{countryId}")]
         [ProducesResponseType(200, Type = typeof(List<Owner>))]
         [ProducesResponseType(400)]
 
-        public IActionResult GetOwnersByCountry(int ownerId)
+        public IActionResult GetOwnersByCountry(int countryId)
         {
-            if (!_countryRepository.CountryExists(ownerId))
+            if (!_countryRepository.CountryExists(countryId))
             {
                 return NotFound();
             }
-            var owners = _mapper.Map<CountryDto>(_countryRepository.GetOwnersbyCountry(ownerId));
+            var owners = _countryRepository.GetOwnersbyCountry(countryId);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

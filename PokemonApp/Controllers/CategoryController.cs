@@ -27,7 +27,8 @@ namespace PokemonApp.Controllers
 
         public IActionResult GetCategories()
         {
-            var categories = _mapper.Map<List<CategoryDto>>(_categoryRepository.GetCategories());
+            var categories = _mapper.Map<List<CategoryDto>>
+                (_categoryRepository.GetCategories());
 
             if (!ModelState.IsValid)
             {
@@ -41,13 +42,13 @@ namespace PokemonApp.Controllers
         [ProducesResponseType(200, Type = typeof(Category))]
         [ProducesResponseType(400)]
 
-        public IActionResult GetCategory(int id)
+        public IActionResult GetCategory(int Id)
         {
-            if (!_categoryRepository.CategoryExists(id))
+            if (!_categoryRepository.CategoryExists(Id))
             {
                 return NotFound();
             }
-            var category = _mapper.Map<CategoryDto>(_categoryRepository.GetCategory(id));
+            var category = _mapper.Map<CategoryDto>(_categoryRepository.GetCategory(Id));
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
