@@ -9,5 +9,7 @@ namespace PokemonApp.Interfaces
         Review GetReview(int id);   
 
         ICollection<Review> GetReviewsofAPokemon(int id);    
+
+        bool ReviewExists(int id);
     }
 }
