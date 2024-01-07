@@ -7,7 +7,7 @@ using PokemonApp.Repository;
 
 namespace PokemonApp.Controllers
 {
-    [Route("/api/[controller]")]
+    [Route("/api/[Controller]")]
     [ApiController]
     public class CategoryController : Controller
     {
@@ -27,7 +27,7 @@ namespace PokemonApp.Controllers
 
         public IActionResult GetCategories()
         {
-            var categories = _mapper.Map<List<CategoryDto>>(_categoryRepository.GetCategories();
+            var categories = _mapper.Map<List<CategoryDto>>(_categoryRepository.GetCategories());
 
             if (!ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace PokemonApp.Controllers
             {
                 return NotFound();
             }
-            var category = _mapper.Map<List<PokemonDto>>(_categoryRepository.GetCategory(categoryId));
+            var category = _mapper.Map<List<PokemonDto>>(_categoryRepository.GetPokeMonByCategory(categoryId));
 
             if (!ModelState.IsValid)
             {
