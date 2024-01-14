@@ -47,5 +47,24 @@ namespace PokemonApp.Repository
         {
             return _context.Countries.Any(p => p.Id == id);
         }
+
+        public bool CreateCountry(Country country)
+        {
+            _context.Add(country);
+
+            return Save();
+        }
+        public bool UpdateCountry(Country country)
+        {
+            _context.Update(country); return Save();
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+
+            return saved > 0 ? true : false;
+        }
+
+       
     }
 }

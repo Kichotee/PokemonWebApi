@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using PokemonApp.Dto;
 using PokemonApp.Interfaces;
@@ -10,7 +11,8 @@ namespace PokemonApp.Controllers
     [Route("/api/[Controller]")]
     [ApiController]
 
-    public class PokemonController :Controller
+
+    public class PokemonController : Controller
     {
         private readonly IPokemonRepository _pokemonRepository;
         private readonly IMapper _mapper;
@@ -22,7 +24,8 @@ namespace PokemonApp.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        [ProducesResponseType(200, Type =typeof(IEnumerable<Pokemon>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Pokemon>))]
+
 
         public IActionResult GetPokemons()
         {
@@ -75,6 +78,42 @@ namespace PokemonApp.Controllers
             return Ok(rating);
 
 
+        }
+
+        [HttpPost]
+        [ProducesResponseType(200, Type = typeof(Category))]
+        [ProducesResponseType(400)]
+        public IActionResult CreatePokemon([FromQuery] int ownerId,
+            [FromQuery] int categoryId,
+            [FromBody] PokemonDto pokemon)
+
+        {
+
+            if (pokemon == null)
+                return BadRequest(ModelState);
+
+            var pokemons = _pokemonRepository.GetPokemons().Where(p => p.Name.
+            Trim().
+            ToLower() == pokemon.Name.Trim().ToLower()).FirstOrDefault();
+
+            if (pokemons!=null)
+            {
+                ModelState.AddModelError("", "Pokemon Already Exists");
+                return StatusCode(422, ModelState);
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+
+            }
+            var pokemonMap = _mapper.Map<Pokemon>(pokemon);
+
+            if (!_pokemonRepository.CreatePokemon(ownerId,categoryId,pokemonMap))
+            {
+                ModelState.AddModelError("", "Error While saving");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Created Successfully");
         }
 
     }

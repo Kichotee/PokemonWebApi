@@ -113,6 +113,42 @@ namespace PokemonApp.Controllers
             return Ok(owners);
 
         }
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+
+        public IActionResult CreateOwner([FromBody] OwnerDto ownerCreate)
+        {
+            if (ownerCreate == null)
+            {
+                return BadRequest(ModelState); 
+                
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var owner = _ownerRepository.GetOwners().Where(
+                c => c.LastName.ToUpper().Trim() == ownerCreate.LastName.ToUpper().Trim())
+                .FirstOrDefault();
+
+            if (owner != null)
+            {
+                ModelState.AddModelError("", "Owner already Exists");
+                return StatusCode(422, ModelState);
+            }
+            var ownerMap = _mapper.Map<Owner>(ownerCreate);
+
+            if (!_ownerRepository.CreateOwner(ownerMap))
+            {
+                ModelState.AddModelError("", "Someting went wrong");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Category created succesfully");
+
+        }
 
     }
 }

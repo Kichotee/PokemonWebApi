@@ -4,11 +4,17 @@ using PokemonApp.Models;
 
 namespace PokemonApp.Repository
 {
-    public class OwnerRepository:IOwnerRepository
+    public class OwnerRepository : IOwnerRepository
     {
         private readonly DataContext _context;
         public OwnerRepository(DataContext context) {
             _context = context;
+        }
+
+        public bool CreateOwner(Owner owner)
+        {
+            _context.Add(owner);
+            return Save();
         }
 
         public Owner GetOwner(int Id)
@@ -38,6 +44,13 @@ namespace PokemonApp.Repository
         public bool OwnerExists(int Id)
         {
             return _context.Owners.Any(p => p.Id==Id);
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+
+            return saved > 0 ? true : false;
         }
     }
 }
